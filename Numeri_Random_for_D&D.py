@@ -232,5 +232,6 @@ class MainApp(FloatLayout):
 class Numeri(App):
     def build(self):
         return MainApp()
+If __name__ == __"main"__:
 
-Numeri().run()
+    Numeri().run()
