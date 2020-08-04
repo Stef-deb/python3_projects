@@ -13,11 +13,13 @@ from kivy.core.audio import SoundLoader
 from kivy.animation import Animation
 from kivy.properties import ListProperty
 from kivy.uix.relativelayout import RelativeLayout
+import os, subprocess
 
 a = 0
 b = 0
 B = 0
 A = [1]
+K = Window.size[1]*0.914
 var = []
 var2 = []
 clock = [0,0]
@@ -26,7 +28,7 @@ lista = "Numeri : "
 somma = []
 hai_selezionato = "Hai selezionato: "
 posiz = Window.size[0]*-1
-posiz1= int(Window.size[0]*0.45)
+posiz1= int(Window.size[0]*0.6)
 #controllo statico risoluzione
 
 #var = Window.size[1]
@@ -62,8 +64,8 @@ class MainApp(FloatLayout):
         self.add_widget(Button(background_down= "img/d12_light.png",background_normal= "img/d12.png",pos_hint= {"x":0.5785, "y":0.03267}, size_hint= (0.1155, 0.07), on_press=self.D12))
         self.add_widget(Button(background_down= "img/d20_light.png",background_normal= "img/d20.png",pos_hint= {"x":0.715, "y":0.03267}, size_hint= (0.1155, 0.07), on_press=self.D20))
         self.add_widget(Button(background_down= "img/d100_light.png",background_normal= "img/d100.png",pos_hint= {"x":0.8515, "y":0.03267}, size_hint= (0.1155, 0.07), on_press=self.D100))
-        self.add_widget(Button(text="clear",font_size=32,pos_hint= {"x":0.8066,"y": 0.922}, size_hint= (0.1155, 0.07), on_press=self.clear ))
-        self.add_widget(Button(background_normal= "img/toolbutton.png",pos_hint= {"x":0.0333, "y":0.92222}, size_hint= (0.2, 0.07), on_press=self.Tend))
+        self.add_widget(Button(background_color= (255/255,85/255,13/255,1), text="clear",font_size=32,pos_hint= {"x":0.8066,"y": 0.922}, size_hint= (0.1155, 0.07), on_press=self.clear ))
+        self.add_widget(Button(background_down= "img/toolbutton_light.png",background_normal= "img/toolbutton.png",pos_hint= {"x":0.0333, "y":0.92222}, size_hint= (0.2, 0.07), on_press=self.Tend))
 
 #testi dei buttons / buttons texts
 
@@ -115,7 +117,13 @@ class MainApp(FloatLayout):
     pression_2 = ListProperty([0, 0])
 
     def Tend(self,*args):
-        global A, var1, posiz1
+        global A, var1, posiz1, lista, somma, hai_selezionato
+        lista = "Numeri: "
+        somma = []
+        hai_selezionato = "Hai selezionato: "
+        self.main_label.text = ""
+        self.second_label.text = ""
+        self.third_label.text = ""
         if var1.pos[0] == posiz1 -1 or var1.pos[0] == 0:
             self.pression_2 = A
             A += A
@@ -129,7 +137,7 @@ class MainApp(FloatLayout):
         a += 1
         b += 1
         var1.pos = (a,0)
-        print(var1.pos[0])
+        #print(var1.pos[0])
 
     def rip4(self,*args):
         global var1
@@ -137,17 +145,17 @@ class MainApp(FloatLayout):
         a -= 1
         b -= 1
         var1.pos = (a,0)
-        print(var1.pos[0])
+        #print(var1.pos[0])
 
 
     def on_pression_2(self, instance ,pos):
         global posiz1
         if a == 0:
             for i in range (1,posiz1):
-                Clock.schedule_once(partial(self.rip3),i*0.0009)
+                Clock.schedule_once(partial(self.rip3),i*0.0005)
         else:
             for i in range (1,posiz1):
-                Clock.schedule_once(partial(self.rip4),i*0.0009)
+                Clock.schedule_once(partial(self.rip4),i*0.0005)
 
 
 # roll dei dadi
@@ -360,18 +368,60 @@ class MainApp(FloatLayout):
 
 
 class Stiic(RelativeLayout):
-    global A,B,posiz
+    global A,B,K,posiz
     def __init__(self,*args):
         super().__init__(*args)
-        self.add_widget(Button(text= ("premi "),size_hint = (0.1155, 0.07),pos_hint ={"center_x": -0.1, "center_y": 0.5}))
+
+        self.add_widget(Label(text= ("Menu"), font_size=32 ,outline_color= (0,0,0,1),outline_width= 2,pos_hint ={"center_x": -0.5, "center_y": 0.9633}))
+        self.add_widget(Label(text= ("Themes"), font_size=32 ,outline_color= (0,0,0,1),outline_width= 2,pos_hint ={"center_x": -0.36, "center_y": 0.75}))
+        self.add_widget(Label(text= ("Sound"), font_size=32 ,outline_color= (0,0,0,1),outline_width= 2,pos_hint ={"center_x": -0.36, "center_y": 0.55}))
+        self.add_widget(Label(text= ("Info"), font_size=32 ,outline_color= (0,0,0,1),outline_width= 2,pos_hint ={"center_x": -0.36, "center_y": 0.35}))
+        self.add_widget(Label(text= ("Language"), font_size=32 ,outline_color= (0,0,0,1),outline_width= 2,pos_hint ={"center_x": -0.36, "center_y": 0.35}))
+
+        self.add_widget(Button(size_hint= (0.05,0.03), text= ("X") ,pos_hint ={"center_x": -0.10, "center_y": 0.974}, on_press= self.Tend))
+        self.add_widget(Button(size_hint= (0.05,0.03), pos_hint ={"center_x": -0.5, "center_y": 0.747}, on_press= self.dir))
+        self.add_widget(Button(size_hint= (0.05,0.03), pos_hint ={"center_x": -0.5, "center_y": 0.547}))
+        self.add_widget(Button(size_hint= (0.05,0.03), pos_hint ={"center_x": -0.5, "center_y": 0.347}))
+        self.add_widget(Button(size_hint= (0.05,0.03), pos_hint ={"center_x": -0.5, "center_y": 0.147}))
+
         with self.canvas.before:
             Color(1,1,1,1) #RGB 93, 220, 196
             self.rectanglez = Rectangle(pos=(posiz,0),size=(Window.size))
+        self.bind(size=self.update_rect)
+    def update_rect(self,*args):
+        self.rectanglez.size= Window.size
+        with self.canvas.before:
+            Color(1,1,0,1) #RGB 93, 220, 196
+            self.rectanglez2 = Rectangle(pos=(posiz,K),size=(Window.size))
 
-    pression_1 = ListProperty([0, 0])
+    pression_2 = ListProperty([0, 0])
+
+    def Tend(self,*args):
+        global A, var1, posiz1
+        if var1.pos[0] == posiz1 -1 or var1.pos[0] == 0:
+            self.pression_2 = A
+            A += A
+            return A
+            return True
+            return super(CustomBtn, self).on_touch_down(touch)
+
+    def rip4(self,*args):
+        global var1
+        global a,b
+        a -= 1
+        b -= 1
+        var1.pos = (a,0)
+        #print(var1.pos[0])
 
 
+    def on_pression_2(self, instance ,pos):
+        global posiz1
+        for i in range (1,posiz1):
+            Clock.schedule_once(partial(self.rip4),i*0.0005)
 
+    def dir(self,*args):
+        file1 = open("Android/data/brtf.txt","a")
+        file1.close
 var1 = Stiic()
 
 
