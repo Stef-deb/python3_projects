@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 from kivy.app import App
 from kivy.uix.button import Button
@@ -61,7 +60,7 @@ class MainApp(FloatLayout):
         self.page_shadow1 = Button(background_color= (0,0,0,0.3),background_normal= "", background_down= "", pos = (0,0), size = (Window.size), on_press = self.pagex)
         self.Tendina = RelativeLayout()
         self.alert = RelativeLayout()
-        self.pagina1 = Button(background_color= (B),background_normal= "", background_down= "", pos = (0,0), pos_hint = {"center_x": 0.5, "center_y": 0.5} ,size_hint = (0.5,0.5) , on_press = self.pagex)
+        self.pagina1 = Button(background_color= (B),background_normal= "", background_down= "", pos = (0,0), pos_hint = {"center_x": 0.5, "center_y": 0.5} ,size_hint = (0.5,0.7) , on_press = self.pagex)
         self.temi = Label(text = "Temi",font_size=32, outline_color= (0,0,0,1), outline_width= 2, pos_hint ={"center_x": 0.66, "center_y": 0.75})
         self.lingua = Label(text = "Lingua", font_size=32, outline_color= (0,0,0,1), outline_width= 2, pos_hint ={"center_x": 0.66, "center_y": 0.55})
         self.sound = Label(text = "Suoni", font_size=32, outline_color= (0,0,0,1), outline_width= 2, pos_hint ={"center_x": 0.66, "center_y": 0.35})
@@ -80,17 +79,17 @@ class MainApp(FloatLayout):
 #temi
 
         self.default_theme = Label(text = "tema chiaro", outline_color= (0,0,0,1), outline_width= 2, pos_hint = {"center_x": 0.5, "center_y": 0.75})
-        self.night_theme = Label(text = "tema notturno", outline_color= (0,0,0,1), outline_width= 2, pos = (larg*0.5, alt*0.5), pos_hint = {"center_x": 0.5, "center_y": 0.65})
-        self.dark_theme = Label(text = "tema scuro", outline_color= (0,0,0,1), outline_width= 2, pos = (larg*0.5, alt*0.5), pos_hint = {"center_x": 0.5, "center_y": 0.55})
-        self.color_theme1 = Label(text = "tema colorato 1", outline_color= (0,0,0,1), outline_width= 2, pos = (larg*0.5, alt*0.5), pos_hint = {"center_x": 0.5, "center_y": 0.45})
-        self.color_theme2 = Label(text = "tema colorato 2", outline_color= (0,0,0,1), outline_width= 2, pos = (larg*0.5, alt*0.5), pos_hint = {"center_x": 0.5, "center_y": 0.35})
-        self.color_theme3 = Label(text = "tema colorato 3", outline_color= (0,0,0,1), outline_width= 2, pos = (larg*0.5, alt*0.5), pos_hint = {"center_x": 0.5, "center_y": 0.25})
-        self.default_themebt = Button(background_color= B1,background_normal= "",background_down= "",size_hint = (0.3, 0.05), pos_hint = {"center_x": 0.5, "center_y": 0.75}, on_press = self.default_themefn)
-        self.night_themebt = Button(background_color= B2 ,background_normal= "",background_down= "",size_hint = (0.3, 0.05), pos_hint = {"center_x": 0.5, "center_y": 0.65}, on_press = self.night_themefn)
-        self.dark_themebt = Button(background_color= B3 ,background_normal= "",background_down= "",size_hint = (0.3, 0.05), pos_hint = {"center_x": 0.5, "center_y": 0.55}, on_press = self.dark_themefn)
-        self.color_theme1bt = Button(background_color= B4 ,background_normal= "",background_down= "",size_hint = (0.3, 0.05), pos_hint = {"center_x": 0.5, "center_y": 0.45}, on_press = self.color_theme1fn)
-        self.color_theme2bt = Button(background_color= B5 ,background_normal= "",background_down= "",size_hint = (0.3, 0.05), pos_hint = {"center_x": 0.5, "center_y": 0.35}, on_press = self.color_theme2fn)
-        self.color_theme3bt = Button(background_color= B6 ,background_normal= "",background_down= "",size_hint = (0.3, 0.05), pos_hint = {"center_x": 0.5, "center_y": 0.25}, on_press = self.color_theme3fn)
+        self.night_theme = Label(text = "tema notturno", outline_color= (0,0,0,1), outline_width= 2,  pos_hint = {"center_x": 0.5, "center_y": 0.65})
+        self.dark_theme = Label(text = "tema scuro", outline_color= (0,0,0,1), outline_width= 2,  pos_hint = {"center_x": 0.5, "center_y": 0.55})
+        self.color_theme1 = Label(text = "tema colorato 1", outline_color= (0,0,0,1), outline_width= 2, pos_hint = {"center_x": 0.5, "center_y": 0.45})
+        self.color_theme2 = Label(text = "tema colorato 2", outline_color= (0,0,0,1), outline_width= 2, pos_hint = {"center_x": 0.5, "center_y": 0.35})
+        self.color_theme3 = Label(text = "tema colorato 3", outline_color= (0,0,0,1), outline_width= 2, pos_hint = {"center_x": 0.5, "center_y": 0.25})
+        self.default_themebt = Button(background_color= B1,background_normal= "",background_down= "",size_hint = (0.3, 0.035), pos_hint = {"center_x": 0.5, "center_y": 0.75}, on_press = self.default_themefn)
+        self.night_themebt = Button(background_color= B2 ,background_normal= "",background_down= "",size_hint = (0.3, 0.035), pos_hint = {"center_x": 0.5, "center_y": 0.65}, on_press = self.night_themefn)
+        self.dark_themebt = Button(background_color= B3 ,background_normal= "",background_down= "",size_hint = (0.3, 0.035), pos_hint = {"center_x": 0.5, "center_y": 0.55}, on_press = self.dark_themefn)
+        self.color_theme1bt = Button(background_color= B4 ,background_normal= "",background_down= "",size_hint = (0.3, 0.035), pos_hint = {"center_x": 0.5, "center_y": 0.45}, on_press = self.color_theme1fn)
+        self.color_theme2bt = Button(background_color= B5 ,background_normal= "",background_down= "",size_hint = (0.3, 0.035), pos_hint = {"center_x": 0.5, "center_y": 0.35}, on_press = self.color_theme2fn)
+        self.color_theme3bt = Button(background_color= B6 ,background_normal= "",background_down= "",size_hint = (0.3, 0.035), pos_hint = {"center_x": 0.5, "center_y": 0.25}, on_press = self.color_theme3fn)
 #sfondi coi buttons
 
         self.background = Button(background_color= (B),background_normal= "", background_down= "" )
@@ -429,7 +428,7 @@ class MainApp(FloatLayout):
 
     def dark_themefn(self,*args):
         global A, B, C, store
-        store.put("X", C1 = (0, 217/255, 1, 1), C2 = (208/255, 249/255, 251/255, 1), B1 = (0, 217/255, 1, 1), B2 = (0, 217/255, 1, 1), B3 = (79/255, 231/255, 19/255, 1), B4 = (0, 217/255, 1, 1), B5 = (0, 217/255, 1, 1), B6 = (0, 217/255, 1, 1))
+        store.put("X", C1 = (36/255, 36/255, 36/255, 1), C2 = (105/255, 108/255, 119/255, 1), B1 = (36/255, 36/255, 36/255, 1), B2 = (36/255, 36/255, 36/255, 1), B3 = (79/255, 231/255, 19/255, 1), B4 = (36/255, 36/255, 36/255, 1), B5 = (36/255, 36/255, 36/255, 1), B6 = (36/255, 36/255, 36/255, 1))
         A = store.get("X")["C1"]
         B = store.get("X")["C2"]
         B1 = store.get("X")["B1"]
@@ -438,6 +437,9 @@ class MainApp(FloatLayout):
         B4 = store.get("X")["B4"]
         B5 = store.get("X")["B5"]
         B6 = store.get("X")["B6"]
+        self.pagina1.background_color = B
+        self.background.background_color = B
+        self.tend_button.background_color = B
         self.default_themebt.background_color = B1
         self.night_themebt.background_color = B2
         self.dark_themebt.background_color = B3
@@ -449,7 +451,7 @@ class MainApp(FloatLayout):
 
     def color_theme1fn(self,*args):
         global A, B, C, store
-        store.put("X", C1 = (0, 217/255, 1, 1), C2 = (208/255, 249/255, 251/255, 1), B1 = (0, 217/255, 1, 1), B2 = (0, 217/255, 1, 1), B3 = (0, 217/255, 1, 1), B4 = (79/255, 231/255, 19/255, 1), B5 = (0, 217/255, 1, 1), B6 = (0, 217/255, 1, 1))
+        store.put("X", C1 = (1, 251/255, 0, 1), C2 = (1, 254/255, 194/255, 1), B1 = (1, 251/255, 0, 1), B2 = (1, 251/255, 0, 1), B3 = (1, 251/255, 0, 1), B4 = (79/255, 231/255, 19/255, 1), B5 = (1, 251/255, 0, 1), B6 = (1, 251/255, 0, 1))
         A = store.get("X")["C1"]
         B = store.get("X")["C2"]
         B1 = store.get("X")["B1"]
@@ -458,6 +460,9 @@ class MainApp(FloatLayout):
         B4 = store.get("X")["B4"]
         B5 = store.get("X")["B5"]
         B6 = store.get("X")["B6"]
+        self.pagina1.background_color = B
+        self.background.background_color = B
+        self.tend_button.background_color = B
         self.default_themebt.background_color = B1
         self.night_themebt.background_color = B2
         self.dark_themebt.background_color = B3
@@ -469,7 +474,7 @@ class MainApp(FloatLayout):
 
     def color_theme2fn(self,*args):
         global A, B, C, store
-        store.put("X", C1 = (0, 217/255, 1, 1), C2 = (208/255, 249/255, 251/255, 1), B1 = (0, 217/255, 1, 1), B2 = (0, 217/255, 1, 1), B3 = (0, 217/255, 1, 1), B4 = (0, 217/255, 1, 1), B5 = (79/255, 231/255, 19/255, 1), B6 = (0, 217/255, 1, 1))
+        store.put("X", C1 = (1, 110/255, 0, 1), C2 = (1, 191/255, 143/255, 1), B1 = (1, 110/255, 0, 1), B2 = (1, 110/255, 0, 1), B3 = (1, 110/255, 0, 1), B4 = (1, 110/255, 0, 1), B5 = (79/255, 231/255, 19/255, 1), B6 = (1, 110/255, 0, 1))
         A = store.get("X")["C1"]
         B = store.get("X")["C2"]
         B1 = store.get("X")["B1"]
@@ -478,6 +483,9 @@ class MainApp(FloatLayout):
         B4 = store.get("X")["B4"]
         B5 = store.get("X")["B5"]
         B6 = store.get("X")["B6"]
+        self.pagina1.background_color = B
+        self.background.background_color = B
+        self.tend_button.background_color = B
         self.default_themebt.background_color = B1
         self.night_themebt.background_color = B2
         self.dark_themebt.background_color = B3
@@ -489,7 +497,7 @@ class MainApp(FloatLayout):
 
     def color_theme3fn(self,*args):
         global A, B, C, store
-        store.put("X", C1 = (0, 217/255, 1, 1), C2 = (208/255, 249/255, 251/255, 1), B1 = (0, 217/255, 1, 1), B2 = (0, 217/255, 1, 1), B3 = (0, 217/255, 1, 1), B4 = (0, 217/255, 1, 1), B5 = (0, 217/255, 1, 1), B6 = (79/255, 231/255, 19/255, 1))
+        store.put("X", C1 = (1, 0, 204/255, 1), C2 = (1, 158/255, 236/255, 1), B1 = (1, 0, 204/255, 1), B2 = (1, 0, 204/255, 1), B3 = (1, 0, 204/255, 1), B4 = (1, 0, 204/255, 1), B5 = (1, 0, 204/255, 1), B6 = (79/255, 231/255, 19/255, 1))
         A = store.get("X")["C1"]
         B = store.get("X")["C2"]
         B1 = store.get("X")["B1"]
@@ -498,6 +506,9 @@ class MainApp(FloatLayout):
         B4 = store.get("X")["B4"]
         B5 = store.get("X")["B5"]
         B6 = store.get("X")["B6"]
+        self.pagina1.background_color = B
+        self.background.background_color = B
+        self.tend_button.background_color = B
         self.default_themebt.background_color = B1
         self.night_themebt.background_color = B2
         self.dark_themebt.background_color = B3
