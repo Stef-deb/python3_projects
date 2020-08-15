@@ -16,7 +16,9 @@ from kivy.properties import ListProperty
 from kivy.storage.jsonstore import JsonStore
 from kivy.animation import Animation
 from kivy.uix.relativelayout import RelativeLayout
+from kivy.core.audio import SoundLoader
 
+sound = SoundLoader.load("dice_roll.mp3")
 
 store = JsonStore('kivy_cache.json')
 try:
@@ -51,6 +53,18 @@ contr = False
 contr1 = False
 page = False
 
+suono_var = False
+suono_var1 = False
+suono_var2 = False
+suono_var3 = False
+suono_var4 = False
+suono_var5 = False
+suono_var6 = False
+suono_var7 = False
+suono_var8 = False
+suono_var9 = False
+suono_var10 = False
+
 class MainApp(FloatLayout):
     def __init__(self,*args):
         super().__init__(*args)
@@ -58,9 +72,12 @@ class MainApp(FloatLayout):
 #Tendina
         self.page_shadow = Button(background_color= (0,0,0,0.3),background_normal= "", background_down= "", pos = (0,0), size = (Window.size), on_press = self.Tend)
         self.page_shadow1 = Button(background_color= (0,0,0,0.3),background_normal= "", background_down= "", pos = (0,0), size = (Window.size), on_press = self.pagex)
+        self.page_shadow2 = Button(background_color= (0,0,0,0.3),background_normal= "", background_down= "", pos = (0,0), size = (Window.size), on_press = self.pagex1)
         self.Tendina = RelativeLayout()
         self.alert = RelativeLayout()
+        self.alert1 = RelativeLayout()
         self.pagina1 = Button(background_color= (B),background_normal= "", background_down= "", pos = (0,0), pos_hint = {"center_x": 0.5, "center_y": 0.5} ,size_hint = (0.5,0.7) , on_press = self.pagex)
+        self.pagina2 = Button(background_color= (B),background_normal= "", background_down= "", pos = (0,0), pos_hint = {"center_x": 0.5, "center_y": 0.5} ,size_hint = (0.3,0.5) , on_press = self.pagex1)
         self.temi = Label(text = "Temi",font_size=32, outline_color= (0,0,0,1), outline_width= 2, pos_hint ={"center_x": 0.66, "center_y": 0.75})
         self.lingua = Label(text = "Lingua", font_size=32, outline_color= (0,0,0,1), outline_width= 2, pos_hint ={"center_x": 0.66, "center_y": 0.55})
         self.sound = Label(text = "Suoni", font_size=32, outline_color= (0,0,0,1), outline_width= 2, pos_hint ={"center_x": 0.66, "center_y": 0.35})
@@ -71,7 +88,7 @@ class MainApp(FloatLayout):
 
         self.temi_bt = Button(size_hint= (0.055275, 0.035), background_color= (1,0,0,1),background_normal= "",background_down= "",pos_hint ={"center_x": 0.56, "center_y": 0.748}, on_press = self.pagex)
         self.lingua_bt = Button(size_hint= (0.055275, 0.035), background_color= (1,0,0,1),background_normal= "",background_down= "",pos_hint ={"center_x": 0.56, "center_y": 0.548})
-        self.sound_bt = Button(size_hint= (0.055275, 0.035), background_color= (1,0,0,1),background_normal= "",background_down= "",pos_hint ={"center_x": 0.56, "center_y": 0.348})
+        self.sound_bt = Button(size_hint= (0.055275, 0.035), background_color= (1,0,0,1),background_normal= "",background_down= "",pos_hint ={"center_x": 0.56, "center_y": 0.348}, on_press = self.pagex1)
         self.info_bt = Button(size_hint= (0.055275, 0.035), background_color= (1,0,0,1),background_normal= "",background_down= "",pos_hint ={"center_x": 0.56, "center_y": 0.148})
         self.ics = Button(text= "X", background_color= (1,0,0,1),background_normal= "",background_down= "",size_hint = (0.04145625, 0.02625), pos_hint = {"center_x": 0.975, "center_y": 0.9845}, on_press=self.Tend )
         self.toolbar_tend = Button(background_color= (A),background_normal= "",background_down= "", pos_hint = {"x":0, "y": 0.9})
@@ -90,6 +107,7 @@ class MainApp(FloatLayout):
         self.color_theme1bt = Button(background_color= B4 ,background_normal= "",background_down= "",size_hint = (0.3, 0.035), pos_hint = {"center_x": 0.5, "center_y": 0.45}, on_press = self.color_theme1fn)
         self.color_theme2bt = Button(background_color= B5 ,background_normal= "",background_down= "",size_hint = (0.3, 0.035), pos_hint = {"center_x": 0.5, "center_y": 0.35}, on_press = self.color_theme2fn)
         self.color_theme3bt = Button(background_color= B6 ,background_normal= "",background_down= "",size_hint = (0.3, 0.035), pos_hint = {"center_x": 0.5, "center_y": 0.25}, on_press = self.color_theme3fn)
+
 #sfondi coi buttons
 
         self.background = Button(background_color= (B),background_normal= "", background_down= "" )
@@ -152,7 +170,8 @@ class MainApp(FloatLayout):
         self.Tendina.add_widget(self.sound_bt)
         self.Tendina.add_widget(self.info_bt)
 
-#Aggiunte dei Widgets alla page button
+#Aggiunte dei Widgets alla page button alert
+
         self.alert.add_widget(self.page_shadow1)
         self.alert.add_widget(self.pagina1)
         self.alert.add_widget(self.default_themebt)
@@ -168,10 +187,61 @@ class MainApp(FloatLayout):
         self.alert.add_widget(self.color_theme2)
         self.alert.add_widget(self.color_theme3)
 
+#Aggiunte dei Widgets alla page button alert
+
+        self.alert1.add_widget(self.page_shadow2)
+        self.alert1.add_widget(self.pagina2)
+
+    def sound_clear(self,*args):
+        global suono_var
+        self.sound.unload()
+        suono_var = False
+    def sound_clear1(self,*args):
+        global suono_var1
+        self.sound1.unload()
+        suono_var1 = False
+    def sound_clear2(self,*args):
+        global suono_var2
+        self.sound2.unload()
+        suono_var2 = False
+    def sound_clear3(self,*args):
+        global suono_var3
+        self.sound3.unload()
+        suono_var3 = False
+    def sound_clear4(self,*args):
+        global suono_var4
+        self.sound4.unload()
+        suono_var4 = False
+    def sound_clear5(self,*args):
+        global suono_var5
+        self.sound5.unload()
+        suono_var5 = False
+    def sound_clear6(self,*args):
+        global suono_var6
+        self.sound6.unload()
+        suono_var6 = False
+    def sound_clear7(self,*args):
+        global suono_var7
+        self.sound7.unload()
+        suono_var7 = False
+    def sound_clear8(self,*args):
+        global suono_var8
+        self.sound8.unload()
+        suono_var8 = False
+    def sound_clear9(self,*args):
+        global suono_var9
+        self.sound9.unload()
+        suono_var9 = False
+    def sound_clear10(self,*args):
+        global suono_var10
+        self.sound10.unload()
+        suono_var10 = False
+
     def D4(self,*args):
-        global lista, somma, hai_selezionato
+        global lista, somma, hai_selezionato, suono_var, suono_var1, suono_var2, suono_var3, suono_var4,suono_var5, suono_var6, suono_var7, suono_var8, suono_var9, suono_var10
         self.ind = str(randint(1,4))
         self.indn = int(self.ind)
+
         if len(somma) == 0:
             somma.append(self.indn)
         else:
@@ -192,8 +262,74 @@ class MainApp(FloatLayout):
             self.second_label.text = ""
             self.third_label.text = ""
 
+        if suono_var == False:
+            self.sound = SoundLoader.load("dice_roll.mp3")
+            self.sound.bind(on_stop=self.sound_clear)
+            self.sound.play()
+            suono_var = True
+
+        elif suono_var1 == False:
+            self.sound1 = SoundLoader.load("dice_roll.mp3")
+            self.sound1.bind(on_stop=self.sound_clear1)
+            self.sound1.play()
+            suono_var1 = True
+
+        elif suono_var2 == False:
+            self.sound2 = SoundLoader.load("dice_roll.mp3")
+            self.sound2.bind(on_stop=self.sound_clear2)
+            self.sound2.play()
+            suono_var2 = True
+
+        elif suono_var3 == False:
+            self.sound3 = SoundLoader.load("dice_roll.mp3")
+            self.sound3.bind(on_stop=self.sound_clear3)
+            self.sound3.play()
+            suono_var3 = True
+
+        elif suono_var4 == False:
+            self.sound4 = SoundLoader.load("dice_roll.mp3")
+            self.sound4.bind(on_stop=self.sound_clear4)
+            self.sound4.play()
+            suono_var4 = True
+
+        elif suono_var5 == False:
+            self.sound5 = SoundLoader.load("dice_roll.mp3")
+            self.sound5.bind(on_stop=self.sound_clear5)
+            self.sound5.play()
+            suono_var5 = True
+
+        elif suono_var6 == False:
+            self.sound6 = SoundLoader.load("dice_roll.mp3")
+            self.sound6.bind(on_stop=self.sound_clear6)
+            self.sound6.play()
+            suono_var6 = True
+
+        elif suono_var7 == False:
+            self.sound7 = SoundLoader.load("dice_roll.mp3")
+            self.sound7.bind(on_stop=self.sound_clear7)
+            self.sound7.play()
+            suono_var7 = True
+
+        elif suono_var8 == False:
+            self.sound8 = SoundLoader.load("dice_roll.mp3")
+            self.sound8.bind(on_stop=self.sound_clear8)
+            self.sound8.play()
+            suono_var8 = True
+
+        elif suono_var9 == False:
+            self.sound9 = SoundLoader.load("dice_roll.mp3")
+            self.sound9.bind(on_stop=self.sound_clear9)
+            self.sound9.play()
+            suono_var9 = True
+
+        elif suono_var10 == False:
+            self.sound10 = SoundLoader.load("dice_roll.mp3")
+            self.sound10.bind(on_stop=self.sound_clear10)
+            self.sound10.play()
+            suono_var10 = True
+
     def D6(self,*args):
-        global lista, somma, hai_selezionato
+        global lista, somma, hai_selezionato, suono_var, suono_var1, suono_var2, suono_var3, suono_var4,suono_var5, suono_var6, suono_var7, suono_var8, suono_var9, suono_var10
         self.ind = str(randint(1,6))
         self.indn = int(self.ind)
         if len(somma) == 0:
@@ -215,9 +351,74 @@ class MainApp(FloatLayout):
             self.main_label.text = ""
             self.second_label.text = ""
             self.third_label.text = ""
+        if suono_var == False:
+            self.sound = SoundLoader.load("dice_roll.mp3")
+            self.sound.bind(on_stop=self.sound_clear)
+            self.sound.play()
+            suono_var = True
+
+        elif suono_var1 == False:
+            self.sound1 = SoundLoader.load("dice_roll.mp3")
+            self.sound1.bind(on_stop=self.sound_clear1)
+            self.sound1.play()
+            suono_var1 = True
+
+        elif suono_var2 == False:
+            self.sound2 = SoundLoader.load("dice_roll.mp3")
+            self.sound2.bind(on_stop=self.sound_clear2)
+            self.sound2.play()
+            suono_var2 = True
+
+        elif suono_var3 == False:
+            self.sound3 = SoundLoader.load("dice_roll.mp3")
+            self.sound3.bind(on_stop=self.sound_clear3)
+            self.sound3.play()
+            suono_var3 = True
+
+        elif suono_var4 == False:
+            self.sound4 = SoundLoader.load("dice_roll.mp3")
+            self.sound4.bind(on_stop=self.sound_clear4)
+            self.sound4.play()
+            suono_var4 = True
+
+        elif suono_var5 == False:
+            self.sound5 = SoundLoader.load("dice_roll.mp3")
+            self.sound5.bind(on_stop=self.sound_clear5)
+            self.sound5.play()
+            suono_var5 = True
+
+        elif suono_var6 == False:
+            self.sound6 = SoundLoader.load("dice_roll.mp3")
+            self.sound6.bind(on_stop=self.sound_clear6)
+            self.sound6.play()
+            suono_var6 = True
+
+        elif suono_var7 == False:
+            self.sound7 = SoundLoader.load("dice_roll.mp3")
+            self.sound7.bind(on_stop=self.sound_clear7)
+            self.sound7.play()
+            suono_var7 = True
+
+        elif suono_var8 == False:
+            self.sound8 = SoundLoader.load("dice_roll.mp3")
+            self.sound8.bind(on_stop=self.sound_clear8)
+            self.sound8.play()
+            suono_var8 = True
+
+        elif suono_var9 == False:
+            self.sound9 = SoundLoader.load("dice_roll.mp3")
+            self.sound9.bind(on_stop=self.sound_clear9)
+            self.sound9.play()
+            suono_var9 = True
+
+        elif suono_var10 == False:
+            self.sound10 = SoundLoader.load("dice_roll.mp3")
+            self.sound10.bind(on_stop=self.sound_clear10)
+            self.sound10.play()
+            suono_var10 = True
 
     def D8(self,*args):
-        global lista, somma, hai_selezionato
+        global lista, somma, hai_selezionato, suono_var, suono_var1, suono_var2, suono_var3, suono_var4,suono_var5, suono_var6, suono_var7, suono_var8, suono_var9, suono_var10
         self.ind = str(randint(1,8))
         self.indn = int(self.ind)
         if len(somma) == 0:
@@ -239,9 +440,74 @@ class MainApp(FloatLayout):
             self.main_label.text = ""
             self.second_label.text = ""
             self.third_label.text = ""
+        if suono_var == False:
+            self.sound = SoundLoader.load("dice_roll.mp3")
+            self.sound.bind(on_stop=self.sound_clear)
+            self.sound.play()
+            suono_var = True
+
+        elif suono_var1 == False:
+            self.sound1 = SoundLoader.load("dice_roll.mp3")
+            self.sound1.bind(on_stop=self.sound_clear1)
+            self.sound1.play()
+            suono_var1 = True
+
+        elif suono_var2 == False:
+            self.sound2 = SoundLoader.load("dice_roll.mp3")
+            self.sound2.bind(on_stop=self.sound_clear2)
+            self.sound2.play()
+            suono_var2 = True
+
+        elif suono_var3 == False:
+            self.sound3 = SoundLoader.load("dice_roll.mp3")
+            self.sound3.bind(on_stop=self.sound_clear3)
+            self.sound3.play()
+            suono_var3 = True
+
+        elif suono_var4 == False:
+            self.sound4 = SoundLoader.load("dice_roll.mp3")
+            self.sound4.bind(on_stop=self.sound_clear4)
+            self.sound4.play()
+            suono_var4 = True
+
+        elif suono_var5 == False:
+            self.sound5 = SoundLoader.load("dice_roll.mp3")
+            self.sound5.bind(on_stop=self.sound_clear5)
+            self.sound5.play()
+            suono_var5 = True
+
+        elif suono_var6 == False:
+            self.sound6 = SoundLoader.load("dice_roll.mp3")
+            self.sound6.bind(on_stop=self.sound_clear6)
+            self.sound6.play()
+            suono_var6 = True
+
+        elif suono_var7 == False:
+            self.sound7 = SoundLoader.load("dice_roll.mp3")
+            self.sound7.bind(on_stop=self.sound_clear7)
+            self.sound7.play()
+            suono_var7 = True
+
+        elif suono_var8 == False:
+            self.sound8 = SoundLoader.load("dice_roll.mp3")
+            self.sound8.bind(on_stop=self.sound_clear8)
+            self.sound8.play()
+            suono_var8 = True
+
+        elif suono_var9 == False:
+            self.sound9 = SoundLoader.load("dice_roll.mp3")
+            self.sound9.bind(on_stop=self.sound_clear9)
+            self.sound9.play()
+            suono_var9 = True
+
+        elif suono_var10 == False:
+            self.sound10 = SoundLoader.load("dice_roll.mp3")
+            self.sound10.bind(on_stop=self.sound_clear10)
+            self.sound10.play()
+            suono_var10 = True
 
     def D10(self,*args):
-        global lista, somma, hai_selezionato
+        global lista, somma, hai_selezionato, suono_var, suono_var1, suono_var2, suono_var3, suono_var4,suono_var5, suono_var6, suono_var7, suono_var8, suono_var9, suono_var10
         self.ind = str(randint(1,10))
         self.indn = int(self.ind)
         if len(somma) == 0:
@@ -263,9 +529,74 @@ class MainApp(FloatLayout):
             self.main_label.text = ""
             self.second_label.text = ""
             self.third_label.text = ""
+        if suono_var == False:
+            self.sound = SoundLoader.load("dice_roll.mp3")
+            self.sound.bind(on_stop=self.sound_clear)
+            self.sound.play()
+            suono_var = True
+
+        elif suono_var1 == False:
+            self.sound1 = SoundLoader.load("dice_roll.mp3")
+            self.sound1.bind(on_stop=self.sound_clear1)
+            self.sound1.play()
+            suono_var1 = True
+
+        elif suono_var2 == False:
+            self.sound2 = SoundLoader.load("dice_roll.mp3")
+            self.sound2.bind(on_stop=self.sound_clear2)
+            self.sound2.play()
+            suono_var2 = True
+
+        elif suono_var3 == False:
+            self.sound3 = SoundLoader.load("dice_roll.mp3")
+            self.sound3.bind(on_stop=self.sound_clear3)
+            self.sound3.play()
+            suono_var3 = True
+
+        elif suono_var4 == False:
+            self.sound4 = SoundLoader.load("dice_roll.mp3")
+            self.sound4.bind(on_stop=self.sound_clear4)
+            self.sound4.play()
+            suono_var4 = True
+
+        elif suono_var5 == False:
+            self.sound5 = SoundLoader.load("dice_roll.mp3")
+            self.sound5.bind(on_stop=self.sound_clear5)
+            self.sound5.play()
+            suono_var5 = True
+
+        elif suono_var6 == False:
+            self.sound6 = SoundLoader.load("dice_roll.mp3")
+            self.sound6.bind(on_stop=self.sound_clear6)
+            self.sound6.play()
+            suono_var6 = True
+
+        elif suono_var7 == False:
+            self.sound7 = SoundLoader.load("dice_roll.mp3")
+            self.sound7.bind(on_stop=self.sound_clear7)
+            self.sound7.play()
+            suono_var7 = True
+
+        elif suono_var8 == False:
+            self.sound8 = SoundLoader.load("dice_roll.mp3")
+            self.sound8.bind(on_stop=self.sound_clear8)
+            self.sound8.play()
+            suono_var8 = True
+
+        elif suono_var9 == False:
+            self.sound9 = SoundLoader.load("dice_roll.mp3")
+            self.sound9.bind(on_stop=self.sound_clear9)
+            self.sound9.play()
+            suono_var9 = True
+
+        elif suono_var10 == False:
+            self.sound10 = SoundLoader.load("dice_roll.mp3")
+            self.sound10.bind(on_stop=self.sound_clear10)
+            self.sound10.play()
+            suono_var10 = True
 
     def D12(self,*args):
-        global lista, somma, hai_selezionato
+        global lista, somma, hai_selezionato, suono_var, suono_var1, suono_var2, suono_var3, suono_var4,suono_var5, suono_var6, suono_var7, suono_var8, suono_var9, suono_var10
         self.ind = str(randint(1,12))
         self.indn = int(self.ind)
         if len(somma) == 0:
@@ -287,9 +618,74 @@ class MainApp(FloatLayout):
             self.main_label.text = ""
             self.second_label.text = ""
             self.third_label.text = ""
+        if suono_var == False:
+            self.sound = SoundLoader.load("dice_roll.mp3")
+            self.sound.bind(on_stop=self.sound_clear)
+            self.sound.play()
+            suono_var = True
+
+        elif suono_var1 == False:
+            self.sound1 = SoundLoader.load("dice_roll.mp3")
+            self.sound1.bind(on_stop=self.sound_clear1)
+            self.sound1.play()
+            suono_var1 = True
+
+        elif suono_var2 == False:
+            self.sound2 = SoundLoader.load("dice_roll.mp3")
+            self.sound2.bind(on_stop=self.sound_clear2)
+            self.sound2.play()
+            suono_var2 = True
+
+        elif suono_var3 == False:
+            self.sound3 = SoundLoader.load("dice_roll.mp3")
+            self.sound3.bind(on_stop=self.sound_clear3)
+            self.sound3.play()
+            suono_var3 = True
+
+        elif suono_var4 == False:
+            self.sound4 = SoundLoader.load("dice_roll.mp3")
+            self.sound4.bind(on_stop=self.sound_clear4)
+            self.sound4.play()
+            suono_var4 = True
+
+        elif suono_var5 == False:
+            self.sound5 = SoundLoader.load("dice_roll.mp3")
+            self.sound5.bind(on_stop=self.sound_clear5)
+            self.sound5.play()
+            suono_var5 = True
+
+        elif suono_var6 == False:
+            self.sound6 = SoundLoader.load("dice_roll.mp3")
+            self.sound6.bind(on_stop=self.sound_clear6)
+            self.sound6.play()
+            suono_var6 = True
+
+        elif suono_var7 == False:
+            self.sound7 = SoundLoader.load("dice_roll.mp3")
+            self.sound7.bind(on_stop=self.sound_clear7)
+            self.sound7.play()
+            suono_var7 = True
+
+        elif suono_var8 == False:
+            self.sound8 = SoundLoader.load("dice_roll.mp3")
+            self.sound8.bind(on_stop=self.sound_clear8)
+            self.sound8.play()
+            suono_var8 = True
+
+        elif suono_var9 == False:
+            self.sound9 = SoundLoader.load("dice_roll.mp3")
+            self.sound9.bind(on_stop=self.sound_clear9)
+            self.sound9.play()
+            suono_var9 = True
+
+        elif suono_var10 == False:
+            self.sound10 = SoundLoader.load("dice_roll.mp3")
+            self.sound10.bind(on_stop=self.sound_clear10)
+            self.sound10.play()
+            suono_var10 = True
 
     def D20(self,*args):
-        global lista, somma, hai_selezionato
+        global lista, somma, hai_selezionato, suono_var, suono_var1, suono_var2, suono_var3, suono_var4,suono_var5, suono_var6, suono_var7, suono_var8, suono_var9, suono_var10
         self.ind = str(randint(1,20))
         self.indn = int(self.ind)
         if len(somma) == 0:
@@ -311,9 +707,74 @@ class MainApp(FloatLayout):
             self.main_label.text = ""
             self.second_label.text = ""
             self.third_label.text = ""
+        if suono_var == False:
+            self.sound = SoundLoader.load("dice_roll.mp3")
+            self.sound.bind(on_stop=self.sound_clear)
+            self.sound.play()
+            suono_var = True
+
+        elif suono_var1 == False:
+            self.sound1 = SoundLoader.load("dice_roll.mp3")
+            self.sound1.bind(on_stop=self.sound_clear1)
+            self.sound1.play()
+            suono_var1 = True
+
+        elif suono_var2 == False:
+            self.sound2 = SoundLoader.load("dice_roll.mp3")
+            self.sound2.bind(on_stop=self.sound_clear2)
+            self.sound2.play()
+            suono_var2 = True
+
+        elif suono_var3 == False:
+            self.sound3 = SoundLoader.load("dice_roll.mp3")
+            self.sound3.bind(on_stop=self.sound_clear3)
+            self.sound3.play()
+            suono_var3 = True
+
+        elif suono_var4 == False:
+            self.sound4 = SoundLoader.load("dice_roll.mp3")
+            self.sound4.bind(on_stop=self.sound_clear4)
+            self.sound4.play()
+            suono_var4 = True
+
+        elif suono_var5 == False:
+            self.sound5 = SoundLoader.load("dice_roll.mp3")
+            self.sound5.bind(on_stop=self.sound_clear5)
+            self.sound5.play()
+            suono_var5 = True
+
+        elif suono_var6 == False:
+            self.sound6 = SoundLoader.load("dice_roll.mp3")
+            self.sound6.bind(on_stop=self.sound_clear6)
+            self.sound6.play()
+            suono_var6 = True
+
+        elif suono_var7 == False:
+            self.sound7 = SoundLoader.load("dice_roll.mp3")
+            self.sound7.bind(on_stop=self.sound_clear7)
+            self.sound7.play()
+            suono_var7 = True
+
+        elif suono_var8 == False:
+            self.sound8 = SoundLoader.load("dice_roll.mp3")
+            self.sound8.bind(on_stop=self.sound_clear8)
+            self.sound8.play()
+            suono_var8 = True
+
+        elif suono_var9 == False:
+            self.sound9 = SoundLoader.load("dice_roll.mp3")
+            self.sound9.bind(on_stop=self.sound_clear9)
+            self.sound9.play()
+            suono_var9 = True
+
+        elif suono_var10 == False:
+            self.sound10 = SoundLoader.load("dice_roll.mp3")
+            self.sound10.bind(on_stop=self.sound_clear10)
+            self.sound10.play()
+            suono_var10 = True
 
     def D100(self,*args):
-        global lista, somma, hai_selezionato
+        global lista, somma, hai_selezionato, suono_var, suono_var1, suono_var2, suono_var3, suono_var4,suono_var5, suono_var6, suono_var7, suono_var8, suono_var9, suono_var10
         self.lista1= ["10","20","30","40","50","60","70","80","90","100"]
         self.indzzz = randint(0,9)
         self.ind = str(self.lista1[self.indzzz])
@@ -337,6 +798,71 @@ class MainApp(FloatLayout):
             self.main_label.text = ""
             self.second_label.text = ""
             self.third_label.text = ""
+        if suono_var == False:
+            self.sound = SoundLoader.load("dice_roll.mp3")
+            self.sound.bind(on_stop=self.sound_clear)
+            self.sound.play()
+            suono_var = True
+
+        elif suono_var1 == False:
+            self.sound1 = SoundLoader.load("dice_roll.mp3")
+            self.sound1.bind(on_stop=self.sound_clear1)
+            self.sound1.play()
+            suono_var1 = True
+
+        elif suono_var2 == False:
+            self.sound2 = SoundLoader.load("dice_roll.mp3")
+            self.sound2.bind(on_stop=self.sound_clear2)
+            self.sound2.play()
+            suono_var2 = True
+
+        elif suono_var3 == False:
+            self.sound3 = SoundLoader.load("dice_roll.mp3")
+            self.sound3.bind(on_stop=self.sound_clear3)
+            self.sound3.play()
+            suono_var3 = True
+
+        elif suono_var4 == False:
+            self.sound4 = SoundLoader.load("dice_roll.mp3")
+            self.sound4.bind(on_stop=self.sound_clear4)
+            self.sound4.play()
+            suono_var4 = True
+
+        elif suono_var5 == False:
+            self.sound5 = SoundLoader.load("dice_roll.mp3")
+            self.sound5.bind(on_stop=self.sound_clear5)
+            self.sound5.play()
+            suono_var5 = True
+
+        elif suono_var6 == False:
+            self.sound6 = SoundLoader.load("dice_roll.mp3")
+            self.sound6.bind(on_stop=self.sound_clear6)
+            self.sound6.play()
+            suono_var6 = True
+
+        elif suono_var7 == False:
+            self.sound7 = SoundLoader.load("dice_roll.mp3")
+            self.sound7.bind(on_stop=self.sound_clear7)
+            self.sound7.play()
+            suono_var7 = True
+
+        elif suono_var8 == False:
+            self.sound8 = SoundLoader.load("dice_roll.mp3")
+            self.sound8.bind(on_stop=self.sound_clear8)
+            self.sound8.play()
+            suono_var8 = True
+
+        elif suono_var9 == False:
+            self.sound9 = SoundLoader.load("dice_roll.mp3")
+            self.sound9.bind(on_stop=self.sound_clear9)
+            self.sound9.play()
+            suono_var9 = True
+
+        elif suono_var10 == False:
+            self.sound10 = SoundLoader.load("dice_roll.mp3")
+            self.sound10.bind(on_stop=self.sound_clear10)
+            self.sound10.play()
+            suono_var10 = True
 
     def clear(self,*args):
         global lista, somma, hai_selezionato
@@ -375,6 +901,21 @@ class MainApp(FloatLayout):
                 contr1 = False
         else:
             self.remove_widget(self.alert)
+            page = False
+            if contr1 == False:
+                self.d100t.add_widget(self.page_shadow)
+                contr1 = True
+
+    def pagex1(self,*args):
+        global page, contr1
+        if page == False:
+            self.add_widget(self.alert1)
+            page = True
+            if contr1 == True:
+                self.d100t.remove_widget(self.page_shadow)
+                contr1 = False
+        else:
+            self.remove_widget(self.alert1)
             page = False
             if contr1 == False:
                 self.d100t.add_widget(self.page_shadow)
