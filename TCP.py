@@ -182,6 +182,7 @@ class MainApp(FloatLayout):
             global path
             path = self.txt3.text
             print (f"storage directory: {self.txt3.text}")
+            os.chdir(path)
             self.layout.add_widget(Label(text = (f"storage directory: {self.txt3.text}"), size_hint_y= None))
         except Exception as e:
             print(e)
@@ -208,6 +209,7 @@ class MainApp(FloatLayout):
             os.chdir(path)
         except Exception as e:
             print(e)
+            self.layout.add_widget(Label(text = str(e), size_hint_y= None))
         #initializing receiver
         try:
             s1 = socket.socket()
@@ -225,7 +227,9 @@ class MainApp(FloatLayout):
             if var.endswith(b"HanDsHak3St3ffoFil3"):
                 var1 = var
                 var1 = var1.split(b"HanDsHak3St3ffoSep")
-                var1[-1].replace(b"HanDsHak3St3ffoFil3", "")
+                print(var1[-1])
+                var1[-1] = var1[-1].replace(b"HanDsHak3St3ffoFil3", b"")
+                print(var1[-1])
                 file = open(var1[0], "wb")
                 file.write(var1[-1])
                 file.close()
@@ -237,7 +241,7 @@ class MainApp(FloatLayout):
                         var1 += var
                     else:
                         var1 = var1.split(b"HanDsHak3St3ffoSep")
-                        var1[-1].replace(b"HanDsHak3St3ffoFil3", "")
+                        var1[-1] = var1[-1].replace(b"HanDsHak3St3ffoFil3", b"")
                         file = open(var1[0], "wb")
                         file.write(var1[-1])
                         file.close()
