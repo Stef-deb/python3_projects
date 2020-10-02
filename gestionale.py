@@ -10,16 +10,12 @@ from kivy.core.window import Window
 from kivy.uix.textinput import TextInput
 from datetime import datetime
 from kivy.uix.scrollview import ScrollView
+from kivy.config import Config
+import threading, time
 
 # outclass
 
-vars_storage = JsonStore("vars_storage")
-
-try:
-    Num = vars_storage.get("Num")["n"]
-except:
-    vars_storage.put("Num", n = 1)
-    Num = 1
+Window.size = (1920, 1080)
 
 data_storage = JsonStore("data_store")
 
@@ -36,23 +32,28 @@ customer_numberz = len(data_storage)
 
 class MainApp(FloatLayout):
     def __init__(self, **kwargs):
-        global Num
         super().__init__(**kwargs)
 
         # background,toolbar
         self.title = Label(text = "Gestionale", font_size = 40, outline_color = (0,0,0,0), outline_width = 2, pos_hint = {"center_x":0.5, "center_y":0.966})
         self.background = Button(background_color = (1,1,1,1), background_normal = "", background_down = "")
         self.toolbar =  Button(background_color = (64/255, 121/255, 191/255, 1), background_normal = "", background_down = "", size_hint = (1, 0.07), pos_hint = {"center_x":0.5, "top":1})
-        self.new_customer = Button(text = "nuovo cliente", pos_hint = {"center_x":0.93, "center_y":0.966}, size_hint = (0.1, 0.06), on_press = self.alertus)
+        self.new_customer = Button(text = "nuovo cliente", pos_hint = {"center_x":0.93, "center_y":0.966}, background_down = "assets/Button_orange_1.png", background_normal = "assets/Button_orange_2.png", size_hint = (0.1, 0.06), on_press = self.alertus)
         self.new_customer.bind(size = self.resize)
-        self.colors = Button(text = "opzioni", pos_hint = {"center_x":0.07, "center_y":0.966}, size_hint = (0.1, 0.06))
-        self.customer_number = Label(text = f"Numero di clienti : {customer_numberz}", font_size = 20, outline_color = (0,0,0,0), outline_width = 2, pos_hint = {"center_x":0.5, "center_y":0.866})
+        self.options = Button(text = "opzioni", background_down = "assets/Button_orange_1.png", background_normal = "assets/Button_orange_2.png", pos_hint = {"center_x":0.07, "center_y":0.966}, size_hint = (0.1, 0.06))
+        self.customer_number = Label(text = f"Numero di clienti : {customer_numberz}", font_size = 20, outline_color = (0,0,0,0), outline_width = 2, pos_hint = {"center_x":0.3, "center_y":0.866})
+        self.search = TextInput(size_hint = (0.2, 0.05), pos_hint = {"center_x":0.7, "center_y":0.866}, multiline = False, on_text_validate = self.search_fn)
+        self.search_text = Label(text = "Cerca",  font_size = 20, outline_color = (0,0,0,1), outline_width = 2, pos_hint = {"center_x":0.55, "center_y":0.866})
+        self.all_button = Button(text = "Tutti", size_hint = (0.05, 0.05), background_down = "assets/Button_orange_1.png", background_normal = "assets/Button_orange_2.png", pos_hint = {"center_x":0.85, "center_y":0.866}, on_press = self.refresh)
         self.add_widget(self.background)
         self.add_widget(self.toolbar)
         self.add_widget(self.title)
         self.add_widget(self.new_customer)
-        self.add_widget(self.colors)
+        self.add_widget(self.options)
         self.add_widget(self.customer_number)
+        self.add_widget(self.search)
+        self.add_widget(self.search_text)
+        self.add_widget(self.all_button)
 
         # customers navigation
 
@@ -67,7 +68,7 @@ class MainApp(FloatLayout):
         self.labellotxt = Label(text = "   Digita il nome\ndel nuovo cliente", outline_color = (0,0,0,1), outline_width = 2, font_size = 20, pos_hint = {"center_x":0.5, "center_y":0.61})
         self.labello = TextInput(size_hint = (0.2, 0.05), pos_hint = {"center_x":0.5, "center_y":0.52}, multiline = False)
         self.labello.bind(on_text_validate = self.save)
-        self.ex = Button(text = "Salva", pos_hint = {"center_x":0.5, "center_y":0.42}, font_size = 20, size_hint = (0.1, 0.1), on_press = self.save)
+        self.ex = Button(text = "Salva", pos_hint = {"center_x":0.5, "center_y":0.42}, background_down = "assets/Button_orange_1.png", background_normal = "assets/Button_orange_2.png", font_size = 20, size_hint = (0.1, 0.1), on_press = self.save)
         self.alertliv.add_widget(self.labello)
         self.alertliv.add_widget(self.ex)
         self.alertliv.add_widget(self.labellotxt)
@@ -78,13 +79,17 @@ class MainApp(FloatLayout):
         self.title2 = Label(text = "Gestionale", font_size = 40, outline_color = (0,0,0,0), outline_width = 2, pos_hint = {"center_x":0.5, "center_y":0.966})
         self.background2 = Button(background_color = (1,1,1,1), background_normal = "", background_down = "")
         self.toolbar2 =  Button(background_color = (191/255, 83/255, 64/255, 1), background_normal = "", background_down = "", size_hint = (1, 0.07), pos_hint = {"center_x":0.5, "top":1})
-        self.exit = Button(text = "Indietro", pos_hint = {"center_x":0.93, "center_y":0.966}, size_hint = (0.1, 0.06), on_press = self.add_customer_view)
-        self.edit = Button(text = "Elimina cliente", pos_hint = {"center_x":0.07, "center_y":0.966}, size_hint = (0.1, 0.06), on_press = self.alert3)
+        self.exit = Button(text = "Indietro", pos_hint = {"center_x":0.93, "center_y":0.966}, background_down = "assets/Button_orange_1.png", background_normal = "assets/Button_orange_2.png", size_hint = (0.1, 0.06), on_press = self.add_customer_view)
+        self.edit = Button(text = "Elimina cliente", pos_hint = {"center_x":0.07, "center_y":0.966}, background_down = "assets/Button_orange_1.png", background_normal = "assets/Button_orange_2.png", size_hint = (0.1, 0.06), on_press = self.alert3)
+        self.works = TextInput(multiline = False, pos_hint = {"center_x":0.5, "center_y":0.35}, size_hint = (0.9, 0.65))
+        self.customer_namez = Label(text = f"Cliente : {customer_name}", font_size = 24, outline_color = (0,0,0,0), outline_width = 2, pos_hint =  {"center_x":0.3, "center_y":0.8})
         self.livello1.add_widget(self.background2)
         self.livello1.add_widget(self.toolbar2)
         self.livello1.add_widget(self.exit)
         self.livello1.add_widget(self.edit)
         self.livello1.add_widget(self.title2)
+        self.livello1.add_widget(self.works)
+        self.livello1.add_widget(self.customer_namez)
 
 
         #delete alert
@@ -93,8 +98,8 @@ class MainApp(FloatLayout):
         self.alertliv3.add_widget(Button(background_color = (0,0,0,0.2), background_down = "", background_normal = ""))
         self.alertliv3.add_widget(Button(background_color = (1,1,1,1), size_hint = (0.3, 0.3), background_down = "", background_normal = "", pos_hint = {"center_x":0.5, "center_y":0.5}))
         self.labello3 = Label(text = "Vuoi davvero eliminare\n il cliente e i relativi dati?", outline_color = (0,0,0,1), outline_width = 2, font_size = 20, pos_hint = {"center_x":0.5, "center_y":0.58})
-        self.ex3 = Button(text = "Si", pos_hint = {"center_x":0.43, "center_y":0.42}, font_size = 20, size_hint = (0.1, 0.1), on_press = self.deletez)
-        self.ex3_1 = Button(text = "No", pos_hint = {"center_x":0.57, "center_y":0.42}, font_size = 20, size_hint = (0.1, 0.1), on_press = self.alert3)
+        self.ex3 = Button(text = "Si", pos_hint = {"center_x":0.43, "center_y":0.42}, background_down = "assets/Button_orange_1.png", background_normal = "assets/Button_orange_2.png", font_size = 20, size_hint = (0.1, 0.1), on_press = self.deletez)
+        self.ex3_1 = Button(text = "No", pos_hint = {"center_x":0.57, "center_y":0.42}, background_down = "assets/Button_orange_1.png", background_normal = "assets/Button_orange_2.png", font_size = 20, size_hint = (0.1, 0.1), on_press = self.alert3)
         self.alertliv3.add_widget(self.labello3)
         self.alertliv3.add_widget(self.ex3)
         self.alertliv3.add_widget(self.ex3_1)
@@ -125,23 +130,51 @@ class MainApp(FloatLayout):
         self.remove_widget(self.root)           # refresh scrollview (removes and adds it)
         self.add_widget(self.root)
 
+    def search_fn(self, *args):
+        self.layout.clear_widgets()
+        self.widgets2()
+        self.remove_widget(self.root)           # refresh scrollview (removes and adds it)
+        self.add_widget(self.root)
+        self.search.text = ""
+
     def save(self, *args):
-        data_storage.put(self.labello.text)
-        self.alertus()
-        self.labello.text = ""                   # creates new customer and refreshes scrollview
-        self.refresh()
-        self.cus_num()
+        global data_storage
+        if len(self.labello.text) == 0:
+            print("nope")
+        else:
+            if not self.labello.text in data_storage:
+                data_storage.put(self.labello.text, data = "")
+                self.alertus()
+                self.labello.text = ""                   # creates new customer and refreshes scrollview
+                self.refresh()
+                self.cus_num()
+            else:
+                print("nope")
+
+    def porcoddio(self, *args):
+            global customer_name
+            var = customer_name
+            while True:
+                print(customer_name)
+                if var != customer_name:
+                    self.customer_namez.text = f"Cliente : {customer_name}"
+                    break
+                else:
+                    continue
 
     def add_customer_view(self, *args):
         global check1
         if check1 == False:
             self.add_widget(self.livello1)
+            p = threading.Thread(target = self.porcoddio)
+            p.start()
             check1 = True                                         # adds layout with customer datas and options
         else:
             self.remove_widget(self.livello1)
             check1 = False
 
     def widgets(self, *args):
+        global customer_name
         self.layout = GridLayout(cols=1, spacing=10, size_hint_y=None)
         self.root = ScrollView(size_hint=(0.77, 0.7), pos_hint = {"center_x":0.5, "center_y":0.42})
         self.layout.bind(minimum_height=self.layout.setter('height'))
@@ -154,8 +187,35 @@ class MainApp(FloatLayout):
                 global customer_name
                 customer_name = self.text
             self.layout.bind(minimum_height=self.layout.setter('height'))
-            self.btn = Button(text= i, size_hint_y=None, height=30, on_press = press)
-            self.layout.add_widget(self.btn)
+            self.sol = RelativeLayout(size_hint_y=None, height=30)
+            self.btn = Button(text = i, size_hint_y=None, height=30, background_down = "assets/Button_sky_4.png", background_normal = "assets/Button_sky_4.png", on_press = press)
+            self.btn_text = Label(text = i, outline_color = (0,0,0,0), outline_width = 2)
+            self.sol.add_widget(self.btn)
+            self.sol.add_widget(self.btn_text)
+            self.layout.add_widget(self.sol)
+            self.btn.bind(on_press = self.add_customer_view)
+        self.root.add_widget(self.layout)
+
+    def widgets2(self, *args):
+        self.layout = GridLayout(cols=1, spacing=10, size_hint_y=None)
+        self.root = ScrollView(size_hint=(0.77, 0.7), pos_hint = {"center_x":0.5, "center_y":0.42})
+        self.layout.bind(minimum_height=self.layout.setter('height'))
+        var =[]
+        for i in data_storage:
+            if self.search.text in i:
+                var.append(i)
+        var = sorted(var)                                                                           # creates scrollview with customers
+        for i in var:
+            def press(self, *args):
+                global customer_name
+                customer_name = self.text
+            self.layout.bind(minimum_height=self.layout.setter('height'))
+            self.sol = RelativeLayout(size_hint_y=None, height=30)
+            self.btn = Button(text = i, size_hint_y=None, height=30, background_down = "assets/Button_sky_4.png", background_normal = "assets/Button_sky_4.png", on_press = press)
+            self.btn_text = Label(text = i, outline_color = (0,0,0,0), outline_width = 2)
+            self.sol.add_widget(self.btn)
+            self.sol.add_widget(self.btn_text)
+            self.layout.add_widget(self.sol)
             self.btn.bind(on_press = self.add_customer_view)
         self.root.add_widget(self.layout)
 
