@@ -11,7 +11,7 @@ from kivy.uix.textinput import TextInput
 from datetime import datetime
 from kivy.uix.scrollview import ScrollView
 from kivy.config import Config
-import threading, time
+import threading
 
 # outclass
 
@@ -81,8 +81,9 @@ class MainApp(FloatLayout):
         self.toolbar2 =  Button(background_color = (191/255, 83/255, 64/255, 1), background_normal = "", background_down = "", size_hint = (1, 0.07), pos_hint = {"center_x":0.5, "top":1})
         self.exit = Button(text = "Indietro", pos_hint = {"center_x":0.93, "center_y":0.966}, background_down = "assets/Button_orange_1.png", background_normal = "assets/Button_orange_2.png", size_hint = (0.1, 0.06), on_press = self.add_customer_view)
         self.edit = Button(text = "Elimina cliente", pos_hint = {"center_x":0.07, "center_y":0.966}, background_down = "assets/Button_orange_1.png", background_normal = "assets/Button_orange_2.png", size_hint = (0.1, 0.06), on_press = self.alert3)
-        self.works = TextInput(multiline = False, pos_hint = {"center_x":0.5, "center_y":0.35}, size_hint = (0.9, 0.65))
-        self.customer_namez = Label(text = f"Cliente : {customer_name}", font_size = 24, outline_color = (0,0,0,0), outline_width = 2, pos_hint =  {"center_x":0.3, "center_y":0.8})
+        self.works = TextInput(multiline = False, pos_hint = {"center_x":0.5, "center_y":0.35}, size_hint = (0.9, 0.65), on_text_validate = self.validatee)
+        self.customer_namez = Label(text = f"Cliente : {customer_name}", font_size = 24, outline_color = (0,0,0,0), outline_width = 2, pos_hint =  {"center_x":0.08, "center_y":0.83})
+
         self.livello1.add_widget(self.background2)
         self.livello1.add_widget(self.toolbar2)
         self.livello1.add_widget(self.exit)
@@ -90,9 +91,33 @@ class MainApp(FloatLayout):
         self.livello1.add_widget(self.title2)
         self.livello1.add_widget(self.works)
         self.livello1.add_widget(self.customer_namez)
+        
+        # work details
+        
+        self.text_work = TextInput(size_hint = (0.1, 0.03), multiline = False, pos_hint = {"center_x":0.31, "center_y":0.83})
+        self.text_work_imp = TextInput(size_hint = (0.1, 0.03), multiline = False, pos_hint = {"center_x":0.58, "center_y":0.83})
+        self.text_work_date = TextInput(size_hint = (0.1, 0.03), multiline = False, pos_hint = {"center_x":0.86, "center_y":0.83})
+        self.text_work_details = TextInput(size_hint = (0.5, 0.03), multiline = False, pos_hint = {"center_x":0.5, "center_y":0.73})
+        self.text_worK_text = Label(text = "Lavoro", font_size = 24, outline_color = (0,0,0,0), outline_width = 2, pos_hint = {"center_x":0.22, "center_y":0.83})
+        self.text_worK_text_imp = Label(text = "Importo", font_size = 24, outline_color = (0,0,0,0), outline_width = 2, pos_hint = {"center_x":0.49, "center_y":0.83})
+        self.text_worK_text_date = Label(text = "Data", font_size = 24, outline_color = (0,0,0,0), outline_width = 2, pos_hint = {"center_x":0.77, "center_y":0.83})
+        self.text_worK_text_details = Label(text = "Dettagli", font_size = 24, outline_color = (0,0,0,0), outline_width = 2, pos_hint = {"center_x":0.21, "center_y":0.73})
+        
+        self.livello1.add_widget(self.text_work)
+        self.livello1.add_widget(self.text_work_imp)
+        self.livello1.add_widget(self.text_work_date)
+        self.livello1.add_widget(self.text_worK_text)
+        self.livello1.add_widget(self.text_work_details)
+        self.livello1.add_widget(self.text_worK_text_imp)
+        self.livello1.add_widget(self.text_worK_text_date)
+        self.livello1.add_widget(self.text_worK_text_details)
 
+        # work details save
 
-        #delete alert
+        self.work_save = Button(text = "Salva", pos_hint =  {"center_x":0.08, "center_y":0.73}, background_down = "assets/Button_orange_1.png", background_normal = "assets/Button_orange_2.png", size_hint = (0.1, 0.06), on_press = self.save_work)
+        self.livello1.add_widget(self.work_save)
+
+        # delete alert
 
         self.alertliv3 = RelativeLayout()
         self.alertliv3.add_widget(Button(background_color = (0,0,0,0.2), background_down = "", background_normal = ""))
@@ -103,7 +128,6 @@ class MainApp(FloatLayout):
         self.alertliv3.add_widget(self.labello3)
         self.alertliv3.add_widget(self.ex3)
         self.alertliv3.add_widget(self.ex3_1)
-
 
     # functions
 
@@ -151,13 +175,13 @@ class MainApp(FloatLayout):
             else:
                 print("nope")
 
-    def porcoddio(self, *args):
+    def solution(self, *args):
             global customer_name
             var = customer_name
             while True:
-                print(customer_name)
                 if var != customer_name:
                     self.customer_namez.text = f"Cliente : {customer_name}"
+                    self.works.text = data_storage.get(customer_name)["data"]
                     break
                 else:
                     continue
@@ -166,7 +190,7 @@ class MainApp(FloatLayout):
         global check1
         if check1 == False:
             self.add_widget(self.livello1)
-            p = threading.Thread(target = self.porcoddio)
+            p = threading.Thread(target = self.solution)
             p.start()
             check1 = True                                         # adds layout with customer datas and options
         else:
@@ -240,6 +264,17 @@ class MainApp(FloatLayout):
         global customer_numberz
         customer_numberz = len(data_storage)
         self.customer_number.text = f"Numero di clienti : {customer_numberz}"
+
+    def save_work(self, *args):
+        self.works.text = self.works.text + self.text_work.text + " - " + self.text_work_imp.text + " - " + self.text_work_date.text + " - " + self.text_work_details.text + "\n"
+        data_storage.put(customer_name, data = self.works.text)
+        self.text_work.text = ""
+        self.text_work_imp.text = ""
+        self.text_work_date.text = ""
+        self.text_work_details.text = ""
+
+    def validatee(self, *args):
+        data_storage.put(customer_name, data = self.works.text)
 
 class MyGest(App):
     def build(self):
